@@ -12,14 +12,14 @@ static int num_of_characteristics;
 double calcdist(double *p1, double *p2) {
     double distsum = 0.0;
     int i;
-    for(i = 0; i < (num_of_characteristics - num_of_characteristics%4); i += 4) {
+    /*for(i = 0; i < (num_of_characteristics - num_of_characteristics%4); i += 4) {
         distsum += fabs(p1[i] * p1[i] - p2[i] * p2[i]);
         distsum += fabs(p1[i + 1] * p1[i + 1] - p2[i + 1] * p2[i + 1]);
         distsum += fabs(p1[i + 2] * p1[i + 2] - p2[i + 2] * p2[i + 2]);
         distsum += fabs(p1[i + 3] * p1[i + 3] - p2[i + 3] * p2[i + 3]);
-    }
-    for(;i < num_of_characteristics; i++) {
-        distsum += fabs(p1[i] * p1[i] - p2[i] * p2[i]);
+    }*/
+    for(i = 0;i < num_of_characteristics; i++) {
+        distsum += fabs(p1[i] - p2[i]);
     }
     return distsum;
 }
@@ -116,7 +116,11 @@ int main(int argc, char *argv[]) {
                 }
             }
         }
-        int *neighbor_labels = (int *) calloc(kval, sizeof(int));
+        int *neighbor_labels = (int *) calloc(NUM_OF_LABELS, sizeof(int));
+		if(!neighbor_labels) {
+			fputs("Não consegui alocar espaço pro calculo do maior label.\n", stderr);
+			return 128;
+		}
         for(int j = 0; j < kval; j++) {
             neighbor_labels[train_label[closest_data[j]]]++;
         }
@@ -138,5 +142,5 @@ int main(int argc, char *argv[]) {
         }
         printf("\n");
     }
-    printf("\nAcertos: %d/%d (%lf%%).\n", acertos, num_of_test_data, ((double)acertos)/num_of_test_data);
+    printf("\nAcertos: %d/%d (%lf%%).\n", acertos, num_of_test_data, 100 * (((double)acertos)/num_of_test_data));
 }
